@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Selecionar Páginas</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        h1 { color: #333; }
+        .pages-section { margin: 20px 0; }
+        .pages-list { max-height: 300px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; }
+        .page-item { margin: 5px 0; }
+        .options { margin: 20px 0; padding: 15px; background: #f5f5f5; border-radius: 5px; }
+        input[type="checkbox"] { margin-right: 5px; }
+        label { margin-right: 20px; }
+        .api-key-section { margin: 15px 0; }
+        input[type="text"] { width: 100%; padding: 8px; margin: 5px 0; }
+        button { background: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #45a049; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Selecione as Páginas/Capítulos para Ler</h1>
+        
+        <form method="post" action="/generate">
+            <input type="hidden" name="filepath" value="{{ filepath }}">
+            <input type="hidden" name="type" value="{{ type }}">
+            
+            <div class="pages-section">
+                <h3>Páginas/Capítulos:</h3>
+                <div class="pages-list">
+                    {% for page in pages %}
+                    <div class="page-item">
+                        <input type="checkbox" name="pages" value="{{ page }}"> {{ page }}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <div class="options">
+                <h3>Opções de Leitura</h3>
+                
+                <div>
+                    <input type="checkbox" name="usar_ia" value="true" id="usar_ia">
+                    <label for="usar_ia">Usar IA para filtrar rodapés e conteúdo desnecessário</label>
+                </div>
+                
+                <div class="api-key-section" id="api-key-section" style="display: none;">
+                    <label for="api_key">Chave da API OpenAI (opcional):</label>
+                    <input type="password" name="api_key" id="api_key" placeholder="sk-...">
+                    <small>Se deixar em branco, apenas fará limpeza básica do texto</small>
+                </div>
+            </div>
+            
+            <button type="submit">Gerar Audiobook</button>
+        </form>
+        
+        <script>
+            document.getElementById('usar_ia').addEventListener('change', function() {
+                document.getElementById('api-key-section').style.display = 
+                    this.checked ? 'block' : 'none';
+            });
+        </script>
+    </div>
+</body>
+</html>
